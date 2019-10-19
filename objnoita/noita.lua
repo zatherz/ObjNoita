@@ -443,7 +443,7 @@ noita.ENTITY_FUNCS = {
 		return noita.entity(EntityGetParent(self.id))
 	end,
 
-	components = function(self)
+	all_components = function(self)
 		return noita.array(EntityGetAllComponents(self.id))
 	end,
 
