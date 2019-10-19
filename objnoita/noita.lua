@@ -599,7 +599,7 @@ noita.COMPONENT_FUNCS = {
 		ComponentGetValueFloat(self.id, prop)
 	end,
 
-	get_vec2 = function(self, prop)
+	vec2 = function(self, prop)
 		return ComponentGetValueVector2(self.id, prop)
 	end,
 
