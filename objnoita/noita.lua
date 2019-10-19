@@ -12,9 +12,328 @@ function noita.print(text, important)
 	end
 end
 
-function noita.mark(text, x, y, r, g, b)
+function noita.type(obj)
+	local lua_type = type(obj)
+	if lua_type == "table" then
+		local meta = getmetatable(obj)
+		if meta then
+			if meta.__objnoita_type then return meta.__objnoita_type end
+		end
+	end
+
+	return lua_type
+end
+
+function noita.add_persistent_flag(flag)
+	AddFlagPersistent(flag)
+end
+
+function noita.disable_autosave()
+	AutosaveDisable()
+end
+
+function noita.convert_everything_to_gold()
+	ConvertEverythingToGold()
+end
+
+function noita.find_free_position_for_body(ideal_pos_x, ideal_pos_y, vel_x, vel_y, body_radius)
+	return FindFreePositionForBody(ideal_pos_x, ideal_pos_y, vel_x, vel_y, body_radius)
+end
+
+function noita.add_run_flag(flag)
+	AddFlagRun(flag)
+end
+
+function noita.create_particle(mat, x, y, count, vel_x, vel_y, visual)
+	GameCreateParticle(mat, x, y, count, vel_x, vel_y, visual)
+end
+
+function noita.camera_pos()
+	return GameGetCameraPos()
+end
+
+function noita.end_game_location()
+	return GameGetEndGameLocation()
+end
+
+function noita.end_game_symbol_name()
+	return GameGetEndGameSymbolName(--[[ ? ]])
+end
+
+function noita.end_game_time()
+	return GameGetEndGameTime()
+end
+
+function noita.frames()
+	return GameGetFrameNum()
+end
+
+function noita.gamepad_connected()
+	return GameIsGamepadConnected()
+end
+
+function noita.trailer_mode_enabled()
+	return GameIsTrailerModeEnabled()
+end
+
+function noita.orb_collected_this_run(orb_id)
+	return GameGetOrbCollectedThisRun(orb_id)
+end
+
+function noita.orb_collected(orb_id)
+	return GameGetOrbCollectedAllTime(orb_id)
+end
+
+function noita.orb_count_this_run()
+	return GameGetOrbCountThisRun()
+end
+
+function noita.orb_count()
+	return GameGetOrbCountAllTime()
+end
+
+function noita.symbol_magic_name()
+	return GameGetSymbolMagicName(--[[ ? ]])
+end
+
+function noita.has_run_flag(flag)
+	return GameHasFlagRun(flag)
+end
+
+function noita.daily_run()
+	return GameIsDailyRun()
+end
+
+function noita.intro_playing()
+	return GameIsIntroPlaying()
+end
+
+function noita.completed()
+	return GameOnCompleted()
+end
+
+function noita.play_sound(bank, event, x, y)
+	GamePlaySound(bank, event, x or 0, y or 0)
+end
+
+function noita.remove_run_flag(flag)
+	GameRemoveFlagRun(flag)
+end
+
+function noita.shake_screen(strength, x, y)
+	GameScreenshake(strength, x or 0, y or 0)
+end
+
+-- Broken? Wrapped func takes no args
+-- function noita.set_active_item()
+-- 	GameSetActiveItem()
+-- end
+
+function noita.set_camera_free(free)
+	GameSetCameraFree(free)
+end
+
+function noita.move_camera(x, y)
+	GameSetCameraPos(x, y)
+end
+
+function noita.localize(key, param0, param1, param2)
+	return GameTextGet(key, param0, param1, param2)
+end
+
+function noita.has_localization(key)
+	return GameTextGetTranslatedOrNot(key)
+end
+
+function noita.trigger_music_cue(name)
+	GameTriggerMusicCue(name)
+end
+
+function noita.trigger_music_event(event, can_fade, x, y)
+	GameTriggerMusicEvent(event, can_fade, x or 0, y or 0)
+end
+
+function noita.fade_out_and_dequeue_all_music()
+	GameTriggerMusicFadeOutAndDequeueAll()
+end
+
+function noita.random_action_with_type(x, y, max_level, type, i)
+	return GetRandomActionWithType(x, y, max_level, type, i)
+end
+
+function noita.spawn_location()
+	return GetSpawnLocation()
+end
+
+function noita.spawn_location_near(x, y, must_be_dark)
+	return GetSpawnLocationNear(x, y, must_be_dark or false)
+end
+
+function noita.surface_normal(x, y, ray_length, ray_count)
+	return GetSurfaceNormal(x, y, ray_length, ray_count)
+end
+
+function noita.bool(key, default)
+	return GetValueBool(key, default)
+end
+
+function noita.int(key, default)
+	return GetValueInteger(key, default)
+end
+
+function noita.number(key, default)
+	return GetValueNumber(key, default)
+end
+
+function noita.set_global(key, value)
+	GlobalsSetValue(key, value)
+end
+
+function noita.global(key, default)
+	return GlobalsGetValue(key, default)
+end
+
+function noita.has_persistent_flag(flag)
+	return HasFlagPersistent(flag)
+end
+
+function noita.load_pixel_scene(materials_file, colors_file, background_file, x, y, skip_biome_checks, skip_edge_textures, color_to_material_table)
+	LoadPixelScene(materials_file, colors_file, x, y, background_file, skip_biome_checks, skip_edge_textures, color_to_material_table)
+end
+
+function noita.loose_chunk(image, x, y, max_durability)
+	LooseChunk(x, y, image, max_durability)
+end
+
+function noita.magic_number(key)
+	return MagicNumbersGetValue(key)
+end
+
+function noita.remove_joints(min_x, min_y, max_x, max_y)
+	PhysicsRemoveJoints(min_x, min_y, max_x, max_y)
+end
+
+function noita.procedural_random(x, y, min, max)
+	return ProceduralRandom(x, y, min, max)
+end
+
+function noita.random()
+	return Random()
+end
+
+function noita.random_distribution(min, max, mean, sharpness, baseline)
+	-- SKIPPED: RandomDistribution() - there's no need for the presumably int specific version
+	return RandomDistributionf(min, max, mean, sharpness, baseline)
+end
+
+function noita.shoot_ray(x, y, target_x, target_y)
+	return Raytrace(x, y, target_x, target_y)
+end
+
+function noita.register_spawn_function(color, func_name)
+	RegsiterSpawnFunction(color, func_name)
+end
+
+function noita.remove_persistent_flag(flag)
+	RemoveFlagPersistent(flag)
+end
+
+function noita.set_seed(x, y)
+	SetRandomSeed(x, y)
+end
+
+function noita.set_timeout(time, file, func)
+	SetTimeOut(time, file, func)
+end
+
+function noita.set_bool(key, value)
+	SetValueBool(key, value)
+end
+
+function noita.set_int(key, value)
+	SetValueInteger(key, value)
+end
+
+function noita.set_number(key, value)
+	SetValueNumber(key, value)
+end
+
+function noita.spawn_persistent_teleport(x, y, level)
+	SpawPersistentTeleport(x, y, level) -- sic
+end
+
+function noita.spawn_action_item(x, y, level)
+	SpawnActionItem(x, y, level)
+end
+
+function noita.spawn_apparition(x, y, level)
+	SpawnApparition(x, y, level)
+end
+
+function noita.spawn_stash(x, y, level, action_count)
+	SpawnStash(x, y, level, action_count)
+end
+
+function noita.biome_stat(key)
+	return StatsBiomeGetValue(key)
+end
+
+function noita.reset_biome_stats()
+	StatsBiomeReset()
+end
+
+function noita.stat(key)
+	return StatsGetValue(key)
+end
+
+function noita.log_player_kill()
+	StatsLogPlayerKill()
+end
+
+function noita.unlock_item(action_id)
+	UnlockItem(action_id)
+end
+
+--- DEBUG ---
+
+function noita.debug_mark(text, x, y, r, g, b)
 	DEBUG_MARK(x, y, text, r or 1, g or 0, b or 0)
 end
+
+function noita.debug_mouse_world_position()
+	return DEBUG_GetMouseWorld()
+end
+
+function noita.debug_enable_trailer_mode()
+	DebugEnableTrailerMode()
+end
+
+function noita.debug_save_test_player()
+	Debug_SaveTestPlayer()
+end
+
+--- MOD ---
+
+noita.MOD_FUNCS = {
+	append_lua = function(self, source, target)
+		ModLuaFileAppend(target, source)
+	end,
+
+	add_magic_numbers = function(self, file)
+		ModMagicNumbersFileAdd(file)
+	end,
+
+	add_materials = function(self, file)
+		ModMaterialsFileAdd(file)
+	end
+}
+
+noita.MOD_META = {
+	__objnoita_type = "mod",
+	__index = noita.MOD_FUNCS
+}
+
+noita.mod = setmetatable({}, noita.MOD_META)
 
 --- ENTITIES & COMPONENTS ---
 
@@ -160,6 +479,65 @@ noita.ENTITY_FUNCS = {
 
 	has_game_effect = function(self, effect)
 		return GameGetGameEffect(self.id, effect)
+	end,
+
+	game_effect_count = function(self, effect)
+		return GameGetGameEffectCount(self.id, effect)
+	end,
+
+	potion_color = function(self)
+		return GameGetPotionColorUint(self.id)
+	end,
+
+	velocity = function(self)
+		return GameGetVelocityCompVelocity(self.id)
+	end,
+
+	animate = function(self, name, priority, followup_name, followup_priority)
+		GamePlayAnimation(self.id, name, priority, followup_name, followup_priority)
+	end,
+
+	shoot_projectile = function(self, x, y, target_x, target_y, projectile_entity, send_message)
+		GameShootProjectile(self.id, x, y, target_x, target_y, projectile_entity, send_message)
+	end,
+
+	shoot_projectile_at = function(self, target, projectile_entity, send_message)
+		local x, y = self:transform()
+		local target_x, target_y = target:transform()
+		GameShootProjectile(self.id, x, y, target_x, target_y, projectile_entity, send_message)
+	end,
+
+	set_herd_id = function(self, herd)
+		GenomeSetHerdId(self.id, herd)
+	end,
+
+	load_game_effect = function(self, file, always_new)
+		-- SKIPPED: LoadGameEffectEntityTo (older version?)
+		GetGameEffectLoadTo(self.id, file, always_new)
+	end,
+
+	is_player = function(self)
+		return IsPlayer(self.id)
+	end,
+
+	add_body_create_box = function(self, mat, offs_x, offs_y, w, h, centered)
+		PhysicsAddBodyCreateBox(self.id, mat, offs_x, offs_y, w, h, centered or false)
+	end,
+
+	add_body_image = function(self, image_file, offs_x, offs_y, centered, is_circle, material_image_file)
+		PhysicsAddBodyImage(self.id, image_file, offs_x, offs_y, centered, is_circle, material_image_file)
+	end,
+
+	add_joint = function(self, body_id0, body_id1, joint_type, offs_x, offs_y)
+		PhysicsAddJoint(self.id, body_id0, body_id1, offs_x, ofs_y, joint_type)
+	end,
+
+	apply_force = function(self, force_x, force_y)
+		PhysicsApplyForce(self.id, force_x, force_y)
+	end,
+
+	set_static = function(self, val)
+		PhysicsSetStatic(self.id, val)
 	end
 }
 
@@ -303,6 +681,10 @@ function noita.load_entity(file, x, y, camera_bound)
 	return noita.entity(ent)
 end
 
+function noita.load_entity_to_stash(file, stash_id)
+	LoadEntityToStash(file, stash_id)
+end
+
 function noita.entities_with_tag(tag)
 	return noita.array(EntityGetWithTag(tag), function(ent) return noita.entity(ent) end)
 end
@@ -317,6 +699,14 @@ end
 
 function noita.world_state_entity()
 	return noita.entity(GameGetWorldStateEntity())
+end
+
+function noita.create_item_action(action_id, x, y)
+	return noita.entity(CreateItemActionEntity(action_id, x or 0, y or 0))
+end
+
+function noita.player_stats()
+	return noita.entity(GameGetPlayerStatsEntity(--[[ ? ]]))
 end
 
 --- GUI ---
@@ -380,3 +770,81 @@ function noita.gui()
 		btn_id = 0
 	}, noita.GUI_META)
 end
+
+--- BIOME MAP ---
+
+--[[
+Note:
+For singletons, I treat the object as if the methods took ID/self params for consistency
+E.g. noita.biome_map:size() instead of noita.biome_map.size()
+]]
+
+noita.BIOME_MAP_FUNCS = {
+	index = function(self)
+		return BiomeMapGetIndex()
+	end,
+	name = function(self)
+		return BiomeMapGetName()
+	end,
+	pixel = function(self, x, y)
+		return BiomeMapGetPixel(x, y)
+	end,
+	size = function(self)
+		return BiomeMapGetSize()
+	end,
+	vertical_position_inside_biome = function(self, x, y)
+		return BiomeMapGetVerticalPositionInsideBiome(x, y)
+	end,
+	load_image = function(self, path, x, y)
+		BiomeMapLoadImage(x, y, path)
+	end,
+	load_image_cropped = function(self, path, x, y, crop_x, crop_y, crop_w, crop_h)
+		BiomeMapLoadImageCropped(x, y, path, crop_x, crop_y, crop_w, crop_h)
+	end,
+	set_pixel = function(self, color, x, y)
+		BiomeMapSetPixel(x, y, color)
+	end,
+	set_size = function(self, w, h)
+		BiomeMapSetSize(w, h)
+	end
+}
+
+noita.BIOME_MAP_META = {
+	__objnoita_type = "biome_map",
+	__index = noita.BIOME_MAP_FUNCS
+}
+
+noita.biome_map = setmetatable({}, noita.BIOME_MAP_META)
+
+--- CELL FACTORY ---
+
+noita.CELL_FACTORY_FUNCS = {
+	fires = function(self)
+		return CellFactory_GetAllFires()
+	end,
+	gases = function(self)
+		return CellFactory_GetAllGases()
+	end,
+	liquids = function(self)
+		return CellFactory_GetAllLiquids()
+	end,
+	sands = function(self)
+		return CellFactory_GetAllSands()
+	end,
+	solids = function(self)
+		return CellFactory_GetAllSolids()
+	end,
+	name = function(mat_id)
+		return CellFactory_GetName(mat_id)
+	end,
+	type = function(mat_name)
+		return CellFactory_GetType(mat_name)
+	end
+}
+
+noita.CELL_FACTORY_META = {
+	__objnoita_type = "cell_factory",
+	__index = noita.CELL_FACTORY_FUNCS
+}
+
+noita.cell_factory = setmetatable({}, noita.CELL_FACTORY_FUNCS)
