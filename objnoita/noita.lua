@@ -357,8 +357,13 @@ noita.GUI_FUNCS = {
 		GuiLayoutAddVerticalSpacing(self.id)
 	end,
 
-	done = function(self)
+	end_layout = function(self)
 		GuiLayoutEnd(self.id)
+	end,
+
+	frame = function(self, func)
+		self:start_frame()
+		func(self)
 	end
 }
 
