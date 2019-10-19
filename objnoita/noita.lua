@@ -2,6 +2,22 @@ if noita then return end
 
 noita = {}
 
+--- GENERAL ---
+
+function noita.print(text, important)
+	if important then
+		GamePrintImportant(text)
+	else
+		GamePrint(text)
+	end
+end
+
+function noita.mark(text, x, y, r, g, b)
+	DEBUG_MARK(x, y, text, r or 1, g or 0, b or 0)
+end
+
+--- ENTITIES & COMPONENTS ---
+
 --https://stackoverflow.com/a/7615129
 local function str_split (inputstr, sep)
         if sep == nil then
@@ -124,6 +140,26 @@ noita.ENTITY_FUNCS = {
 		if (not self:alive()) then
 			error("Entity is dead!")
 		end
+	end,
+
+	regen_container_item_actions = function(self)
+		GameRegenItemActionsInContainer(self.id)
+	end,
+
+	regen_player_item_actions = function(self)
+		GameRegenItemActionsInPlayer(self.id)
+	end,
+
+	regen_item_action = function(self)
+		GameRegenItemAction(self.id)
+	end,
+
+	add_material = function(self, mat, count)
+		AddMaterialInventoryMaterial(self.id, mat, count or 1)
+	end,
+
+	has_game_effect = function(self, effect)
+		return GameGetGameEffect(self.id, effect)
 	end
 }
 
@@ -277,4 +313,65 @@ end
 
 function noita.updated_component()
 	return noita.component(GetUpdatedEntityID(), GetUpdatedComponentID())
+end
+
+function noita.world_state_entity()
+	return noita.entity(GameGetWorldStateEntity())
+end
+
+--- GUI ---
+noita.GUI_FUNCS = {
+	destroy = function(self)
+		GuiDestroy(self.id)
+	end,
+
+	start_frame = function(self)
+		GuiStartFrame(self.id)
+	end,
+
+	text = function(self, text, x, y, centered)
+		if centered then
+			GuiTextCentered(self.id, x or 0, y or 0, text)
+		else
+			GuiText(self.id, x or 0, y or 0, text)
+		end
+	end,
+
+	button = function(self, text, id, x, y)
+		GuiButton(self.id, x or 0, y or 0, text, id)
+	end,
+
+	begin_layout_horizontal = function(self, x, y)
+		GuiLayoutBeginHorizontal(self.id, x or 0, y or 0)
+	end,
+
+	begin_layout_vertical = function(self, x, y)
+		GuiLayoutBeginVertical(self.id, x or 0, y or 0)
+	end,
+
+	add_horizontal_spacing = function(self)
+		GuiLayoutAddHorizontalSpacing(self.id)
+	end,
+
+	add_vertical_spacing = function(self)
+		GuiLayoutAddVerticalSpacing(self.id)
+	end,
+
+	done = function(self)
+		GuiLayoutEnd(self.id)
+	end
+}
+
+noita.GUI_META = {
+	__objnoita_type = "gui",
+	__index = noita.GUI_FUNCS
+}
+
+function noita.gui()
+	local id = GuiCreate()
+
+	return setmetatable({
+		id = id,
+		btn_id = 0
+	}, noita.GUI_META)
 end
