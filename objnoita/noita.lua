@@ -709,6 +709,10 @@ function noita.player_stats()
 	return noita.entity(GameGetPlayerStatsEntity(--[[ ? ]]))
 end
 
+function noita.closest_entity_with_tag(tag, x, y)
+	return noita.entity(EntityGetClosestWithTag(x, y, tag))
+end
+
 --- GUI ---
 noita.GUI_FUNCS = {
 	destroy = function(self)
