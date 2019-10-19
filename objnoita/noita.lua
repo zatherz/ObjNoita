@@ -382,6 +382,11 @@ noita.ENTITY_FUNCS = {
 		return GetUpdatedEntityID() == self.id
 	end,
 
+	component = function(self, type)
+		local components = self:components(type)
+		return components[1]
+	end,
+
 	components = function(self, type)
 		return noita.array(EntityGetComponent(self.id, type), function(comp)
 			return noita.component(self.id, comp)
