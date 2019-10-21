@@ -294,6 +294,10 @@ function noita.unlock_item(action_id)
 	UnlockItem(action_id)
 end
 
+function noita.time_since_started()
+	return GameGetRealWorldTimeSinceStarted()
+end
+
 --- DEBUG ---
 
 function noita.debug_mark(text, x, y, r, g, b)
@@ -312,7 +316,7 @@ function noita.debug_save_test_player()
 	Debug_SaveTestPlayer()
 end
 
-function noita.is_dev_build()
+function noita.debug_is_dev_build()
 	return DebugGetIsDevBuild()
 end
 
