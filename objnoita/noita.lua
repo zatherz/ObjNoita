@@ -312,6 +312,10 @@ function noita.debug_save_test_player()
 	Debug_SaveTestPlayer()
 end
 
+function noita.is_dev_build()
+	return DebugGetIsDevBuild()
+end
+
 --- MOD ---
 
 noita.MOD_FUNCS = {
@@ -422,13 +426,17 @@ noita.ENTITY_FUNCS = {
 	end,
 
 	has_tag = function(self, search_tag)
-		local tags = self:tags()
-		for i, tag in ipairs(tags) do
-			if tag == search_tag then
-				return true
-			end
-		end
-		return false
+		return EntityHasTag(self.id, search_tag)
+
+		-- workaround no longer necessary:
+		--
+		-- local tags = self:tags()
+		-- for i, tag in ipairs(tags) do
+		-- 	if tag == search_tag then
+		-- 		return true
+		-- 	end
+		-- end
+		-- return false
 	end,
 
 	set_name = function(self, name)
@@ -543,6 +551,19 @@ noita.ENTITY_FUNCS = {
 
 	set_static = function(self, val)
 		PhysicsSetStatic(self.id, val)
+	end,
+
+	apply_torque = function(self, torque)
+		PhysicsApplyTorque(self.id, torque)
+	end,
+
+	remove_tag = function(self, tag)
+		EntityRemoveTag(self.id, tag)
+	end,
+
+	closest_entity = function(self)
+		local x, y = self:transform()
+		return noita.entity(EntityGetClosest(self.id, x, y))
 	end
 }
 
@@ -626,6 +647,10 @@ noita.COMPONENT_FUNCS = {
 
 	members = function(self)
 		return ComponentGetMembers(self.id)
+	end,
+
+	apply_torque = function(self, torque)
+		PhysicsApplyTorqueToComponent(self.entity_id, self.id, torque)
 	end
 }
 
@@ -716,6 +741,14 @@ end
 
 function noita.closest_entity_with_tag(tag, x, y)
 	return noita.entity(EntityGetClosestWithTag(x, y, tag))
+end
+
+function noita.closest_entity(x, y)
+	return noita.entity(EntityGetClosest(x, y))
+end
+
+function noita.entity_with_name(name)
+	return noita.entity(EntityGetWithName(name))
 end
 
 --- GUI ---
