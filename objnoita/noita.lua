@@ -388,7 +388,7 @@ noita.ENTITY_FUNCS = {
 	end,
 
 	components = function(self, type)
-		return noita.array(EntityGetComponent(self.id, type), function(comp)
+		return noita.array(EntityGetComponent(self.id, type) or {}, function(comp)
 			return noita.component(self.id, comp)
 		end)
 	end,
@@ -449,7 +449,7 @@ noita.ENTITY_FUNCS = {
 	end,
 
 	all_components = function(self)
-		return noita.array(EntityGetAllComponents(self.id))
+		return noita.array(EntityGetAllComponents(self.id), function(comp) return noita.component(self.id, comp) end)
 	end,
 
 	kill = function(self)
@@ -691,7 +691,7 @@ function noita.load_entity_to_stash(file, stash_id)
 end
 
 function noita.entities_with_tag(tag)
-	return noita.array(EntityGetWithTag(tag), function(ent) return noita.entity(ent) end)
+	return noita.array(EntityGetWithTag(tag) or {}, function(ent) return noita.entity(ent) end)
 end
 
 function noita.updated_entity()
