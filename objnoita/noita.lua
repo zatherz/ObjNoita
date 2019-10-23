@@ -249,7 +249,10 @@ function noita.set_seed(x, y)
 end
 
 function noita.set_timeout(time, file, func)
-	SetTimeOut(time, file, func)
+	--#removed
+	print("OBJNOITA: DEPRECATED FUNCTION: noita.set_timeout, DOES NOTHING")
+	print("OBJNOITA: This function was removed from the game.")
+	--SetTimeOut(time, file, func)
 end
 
 function noita.set_bool(key, value)
