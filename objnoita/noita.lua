@@ -315,8 +315,8 @@ function noita.baab_instruction(entity_file)
 	BaabInstruction(entity_file)
 end
 
-function noita.register_gun_actions()
-	RegisterGunActions()
+function noita.register_gun_action()
+	RegisterGunAction()
 end
 
 function noita.register_gun_shot_effects()
