@@ -384,6 +384,27 @@ function noita.start_reload(reload_time)
 	StartReload(reload_time)
 end
 
+function noita.action_used(action_id)
+	ActionUsedd(action_id) -- sic
+end
+
+function noita.action_uses_remaining_changed(inventoryitem_id, uses_remaining)
+	ActionUsesRemainingChanged(inventoryitem_id, uses_remaining)
+end
+
+function noita.action_played(action_id)
+	OnActionPlayed(action_id)
+end
+
+function noita.not_enough_mana_for_action(action_id)
+	OnNotEnoughManaForAction(action_id)
+end
+
+function noita.complete_game()
+	-- note: triggers steam achievement!
+	GameOnComplete()
+end
+
 --- DEBUG ---
 
 function noita.debug_mark(text, x, y, r, g, b)
