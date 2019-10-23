@@ -615,7 +615,7 @@ noita.ENTITY_FUNCS = {
 	end,
 
 	potion_color = function(self)
-		return GameGetPotionColorUint(self.id)
+		return GameGetPotionColor(self.id)
 	end,
 
 	velocity = function(self)
