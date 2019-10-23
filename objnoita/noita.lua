@@ -44,8 +44,9 @@ function noita.add_run_flag(flag)
 	AddFlagRun(flag)
 end
 
-function noita.create_particle(mat, x, y, count, vel_x, vel_y, visual)
-	GameCreateParticle(mat, x, y, count, vel_x, vel_y, visual)
+function noita.create_particle(mat, x, y, count, vel_x, vel_y, visual, draw_as_long)
+	--#optional draw_as_long
+	GameCreateParticle(mat, x, y, count, vel_x, vel_y, visual, draw_as_long)
 end
 
 function noita.camera_pos()
@@ -57,7 +58,7 @@ function noita.end_game_location()
 end
 
 function noita.end_game_symbol_name()
-	return GameGetEndGameSymbolName(--[[ ? ]])
+	return GameGetEndGameSymbolName()
 end
 
 function noita.end_game_time()
@@ -93,7 +94,7 @@ function noita.orb_count()
 end
 
 function noita.symbol_magic_name()
-	return GameGetSymbolMagicName(--[[ ? ]])
+	return GameGetSymbolMagicName()
 end
 
 function noita.has_run_flag(flag)
@@ -101,7 +102,10 @@ function noita.has_run_flag(flag)
 end
 
 function noita.daily_run()
-	return GameIsDailyRun()
+	--#deprecated entity:is_daily_run()
+	print("OBJNOITA: DEPRECATED FUNCTION: noita.daily_run, ALWAYS RETURNS FALSE")
+	print("OBJNOITA: Please use entity:is_daily_run() (unknown whether it should be used on a player or on the world state entity)")
+	return false
 end
 
 function noita.intro_playing()
@@ -124,10 +128,9 @@ function noita.shake_screen(strength, x, y)
 	GameScreenshake(strength, x or 0, y or 0)
 end
 
--- Broken? Wrapped func takes no args
--- function noita.set_active_item()
--- 	GameSetActiveItem()
--- end
+function noita.set_active_item()
+	GameSetActiveItem()
+end
 
 function noita.set_camera_free(free)
 	GameSetCameraFree(free)
@@ -153,8 +156,9 @@ function noita.trigger_music_event(event, can_fade, x, y)
 	GameTriggerMusicEvent(event, can_fade, x or 0, y or 0)
 end
 
-function noita.fade_out_and_dequeue_all_music()
-	GameTriggerMusicFadeOutAndDequeueAll()
+function noita.fade_out_and_dequeue_all_music(relative_fade_speed)
+	--#optional relative_fade_speed
+	GameTriggerMusicFadeOutAndDequeueAll(relative_fade_speed)
 end
 
 function noita.random_action_with_type(x, y, max_level, type, i)
@@ -170,6 +174,7 @@ function noita.spawn_location_near(x, y, must_be_dark)
 end
 
 function noita.surface_normal(x, y, ray_length, ray_count)
+	--#return 4
 	return GetSurfaceNormal(x, y, ray_length, ray_count)
 end
 
@@ -178,7 +183,7 @@ function noita.bool(key, default)
 end
 
 function noita.int(key, default)
-	return GetValueInteger(key, default)
+	return GetValueInt(key, default)
 end
 
 function noita.number(key, default)
@@ -202,6 +207,7 @@ function noita.load_pixel_scene(materials_file, colors_file, background_file, x,
 end
 
 function noita.loose_chunk(image, x, y, max_durability)
+	--#optional max_durability
 	LooseChunk(x, y, image, max_durability)
 end
 
@@ -251,7 +257,7 @@ function noita.set_bool(key, value)
 end
 
 function noita.set_int(key, value)
-	SetValueInteger(key, value)
+	SetValueInt(key, value)
 end
 
 function noita.set_number(key, value)
@@ -259,7 +265,7 @@ function noita.set_number(key, value)
 end
 
 function noita.spawn_persistent_teleport(x, y, level)
-	SpawPersistentTeleport(x, y, level) -- sic
+	SpawnPersistentTeleport(x, y, level)
 end
 
 function noita.spawn_action_item(x, y, level)
@@ -287,7 +293,10 @@ function noita.stat(key)
 end
 
 function noita.log_player_kill()
-	StatsLogPlayerKill()
+	--#removed
+	print("OBJNOITA: DEPRECATED FUNCTION: noita.log_player_kill, DOES NOTHING")
+	print("OBJNOITA: This function was removed from the game.")
+-- 	StatsLogPlayerKill()
 end
 
 function noita.unlock_item(action_id)
@@ -296,6 +305,83 @@ end
 
 function noita.time_since_started()
 	return GameGetRealWorldTimeSinceStarted()
+end
+
+function noita.do_secret_ending()
+	GameDoEnding2()
+end
+
+function noita.baab_instruction(entity_file)
+	BaabInstruction(entity_file)
+end
+
+function noita.register_gun_actions()
+	RegisterGunActions()
+end
+
+function noita.register_gun_shot_effects()
+	RegisterGunShotEffects()
+end
+
+function noita.set_projectile_configs()
+	SetProjectileConfigs()
+end
+
+function noita.register_projectile(entity_file)
+	RegisterProjectile(entity_file)
+end
+
+function noita.begin_projectile(entity_file)
+	BeginProjectile(entity_file)
+end
+
+function noita.end_projectile()
+	EndProjectile()	
+end
+
+function noita.projectile(entity_file, func)
+	BeginProjectile(entity_file)
+	func()
+	EndProjectile()
+end
+
+function noita.begin_trigger_timer(timeout_frames)
+	BeginTriggerTimer(timeout_frames)
+end
+
+function noita.begin_trigger_death()
+	BeginTriggerDeath()
+end
+
+function noita.begin_trigger_hit_world()
+	BeginTriggerHitWorld()
+end
+
+function noita.end_trigger()
+	EndTrigger()
+end
+
+function noita.trigger_timer(timeout_frames, func)
+	BeginTriggerTimer(timeout_frames)
+	EndTrigger()
+end
+
+function noita.trigger_death(func)
+	BeginTriggerDeath()
+	EndTrigger()
+end
+
+function noita.trigger_hit_world(func)
+	BeginTriggerHitWorld()
+	EndTrigger()
+end
+
+function noita.log_action(action_name)
+	LogAction(action_name)
+end
+
+function noita.start_reload(reload_time)
+	StartReload(reload_time)
 end
 
 --- DEBUG ---
@@ -333,6 +419,10 @@ noita.MOD_FUNCS = {
 
 	add_materials = function(self, file)
 		ModMaterialsFileAdd(file)
+	end,
+
+	register_audio_event_mappings = function(self, file)
+		ModRegisterAudioEventMappings(file)
 	end
 }
 
@@ -390,9 +480,9 @@ noita.ENTITY_FUNCS = {
 		return GetUpdatedEntityID() == self.id
 	end,
 
-	component = function(self, type)
-		local components = self:components(type)
-		return components[1]
+	component = function(self, type, tag)
+		--#optional tag
+		return noita.entity(EntityGetFirstComponent(self.id, type, tag))
 	end,
 
 	components = function(self, type)
@@ -414,6 +504,7 @@ noita.ENTITY_FUNCS = {
 	end,
 
 	transform = function(self)
+		--#return 2
 		return EntityGetTransform(self.id)
 	end,
 
@@ -528,9 +619,8 @@ noita.ENTITY_FUNCS = {
 		GenomeSetHerdId(self.id, herd)
 	end,
 
-	load_game_effect = function(self, file, always_new)
-		-- SKIPPED: LoadGameEffectEntityTo (older version?)
-		GetGameEffectLoadTo(self.id, file, always_new)
+	load_game_effect = function(self, file)
+		GetGameEffectLoadTo(self.id, file)
 	end,
 
 	is_player = function(self)
@@ -541,8 +631,8 @@ noita.ENTITY_FUNCS = {
 		PhysicsAddBodyCreateBox(self.id, mat, offs_x, offs_y, w, h, centered or false)
 	end,
 
-	add_body_image = function(self, image_file, offs_x, offs_y, centered, is_circle, material_image_file)
-		PhysicsAddBodyImage(self.id, image_file, offs_x, offs_y, centered, is_circle, material_image_file)
+	add_body_image = function(self, image_file, material, offs_x, offs_y, centered, is_circle, material_image_file)
+		PhysicsAddBodyImage(self.id, image_file, material, offs_x, offs_y, centered, is_circle, material_image_file)
 	end,
 
 	add_joint = function(self, body_id0, body_id1, joint_type, offs_x, offs_y)
@@ -568,6 +658,18 @@ noita.ENTITY_FUNCS = {
 	closest_entity = function(self)
 		local x, y = self:transform()
 		return noita.entity(EntityGetClosest(self.id, x, y))
+	end,
+
+	pickup_inventory_item = function(self, item)
+		GamePickUpInventoryItem(self.id, noita.entity(item).id)
+	end,
+
+	kill_inventory_item = function(self, item)
+		GameKillInventoryItem(self.id, noita.entity(item).id)
+	end,
+
+	is_daily_run = function(self)
+		return GameIsDailyRun(self.id)
 	end
 }
 
@@ -637,6 +739,10 @@ noita.COMPONENT_FUNCS = {
 		return ComponentObjectGetValue(self.id, prop, field)
 	end,
 
+	get_object_value_bool = function(self, prop, field)
+		return ComponentObjectGetValueBool(self.id, prop, field)
+	end,
+
 	int = function(self, prop)
 		return ComponentGetValueInt(self.id, prop)
 	end,
@@ -702,7 +808,8 @@ function noita.entity_id(ent)
 end
 
 function noita.create_entity(name)
-	return noita.entity(EntityCreateNew(name or ""))
+	--#optional name
+	return noita.entity(EntityCreateNew(name))
 end
 
 function noita.load_entity(file, x, y, camera_bound)
@@ -736,11 +843,12 @@ function noita.world_state_entity()
 end
 
 function noita.create_item_action(action_id, x, y)
-	return noita.entity(CreateItemActionEntity(action_id, x or 0, y or 0))
+	--#optional x,y
+	return noita.entity(CreateItemActionEntity(action_id, x, y))
 end
 
 function noita.player_stats()
-	return noita.entity(GameGetPlayerStatsEntity(--[[ ? ]]))
+	return noita.entity(GameGetPlayerStatsEntity())
 end
 
 function noita.closest_entity_with_tag(tag, x, y)
@@ -829,13 +937,15 @@ noita.BIOME_MAP_FUNCS = {
 	index = function(self)
 		return BiomeMapGetIndex()
 	end,
-	name = function(self)
-		return BiomeMapGetName()
+	name = function(self, x, y)
+		--#optional x,y
+		return BiomeMapGetName(x, y)
 	end,
 	pixel = function(self, x, y)
 		return BiomeMapGetPixel(x, y)
 	end,
 	size = function(self)
+		--#return 2
 		return BiomeMapGetSize()
 	end,
 	vertical_position_inside_biome = function(self, x, y)
@@ -865,20 +975,20 @@ noita.biome_map = setmetatable({}, noita.BIOME_MAP_META)
 --- CELL FACTORY ---
 
 noita.CELL_FACTORY_FUNCS = {
-	fires = function(self)
-		return CellFactory_GetAllFires()
+	fires = function(self, include_statics)
+		return CellFactory_GetAllFires(include_statics or true)
 	end,
-	gases = function(self)
-		return CellFactory_GetAllGases()
+	gases = function(self, include_statics)
+		return CellFactory_GetAllGases(include_statics or true)
 	end,
-	liquids = function(self)
-		return CellFactory_GetAllLiquids()
+	liquids = function(self, include_statics)
+		return CellFactory_GetAllLiquids(include_statics or true)
 	end,
-	sands = function(self)
-		return CellFactory_GetAllSands()
+	sands = function(self, include_statics)
+		return CellFactory_GetAllSands(include_statics or true)
 	end,
-	solids = function(self)
-		return CellFactory_GetAllSolids()
+	solids = function(self, include_statics)
+		return CellFactory_GetAllSolids(include_statics or true)
 	end,
 	name = function(mat_id)
 		return CellFactory_GetName(mat_id)
